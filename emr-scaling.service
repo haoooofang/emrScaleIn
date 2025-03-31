@@ -1,0 +1,20 @@
+[Unit]
+Description=EMR Auto-Scaling Service
+After=network.target
+
+[Service]
+Type=simple
+User=ec2-user
+ExecStart=/usr/bin/python3 /opt/emr-scaling/main.py --config /etc/emr-scaling/config.yaml
+WorkingDirectory=/opt/emr-scaling
+Restart=on-failure
+RestartSec=5s
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=emr-scaling
+
+# Send SIGHUP to reload configuration
+ExecReload=/bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,17 @@
+emr:
+  cluster_id: "j-XXXXXXXXXXXX"  # EMR cluster ID
+  region: "us-west-2"           # AWS region
+
+monitoring:
+  sampling_interval: 60        # Sampling interval in seconds
+  history_periods: 5           # Number of historical sampling periods to retain (n)
+  threshold_periods: 3          # Number of periods required to trigger downscaling (m)
+  min_capacity: 16               # Minimum capacity units
+  
+thresholds:
+  low_utilization: 0.5          # Lower threshold, consider downscaling below this value
+  high_utilization: 0.9         # Upper threshold, restore capacity above this value
+  target_utilization: 0.7       # Target utilization after downscaling
+
+weights:
+  decay_factor: 0.9             # Weight decay factor for historical samples
