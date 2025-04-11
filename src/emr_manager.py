@@ -100,6 +100,7 @@ class EMRClusterManager:
             
             # Update the maximum capacity
             new_config['ComputeLimits']['MaximumCapacityUnits'] = max_capacity
+            new_config['ComputeLimits']['MaximumOnDemandCapacityUnits'] = max_capacity
             
             # Update the scaling policy
             self.emr_client.put_managed_scaling_policy(
