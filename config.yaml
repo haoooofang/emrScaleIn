@@ -1,5 +1,5 @@
 emr:
-  cluster_id: "j-XXXXXXXXXXXX"  # EMR cluster ID
+  cluster_id: "j-3RQ26FKTDT8WW"  # EMR cluster ID
   region: "us-west-2"           # AWS region
 
 monitoring:

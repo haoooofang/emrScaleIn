@@ -3,44 +3,31 @@ import os
 from logging.handlers import RotatingFileHandler
 import sys
 
-def setup_logging(log_level=logging.INFO, log_file=None, log_to_console=True):
-    """
-    Set up logging configuration for the application.
-    
-    Args:
-        log_level: Logging level (default: INFO)
-        log_file: Path to log file (default: None)
-        log_to_console: Whether to log to console (default: True)
-    
-    Returns:
-        Logger object
-    """
+def setup_logging(log_level=logging.INFO, log_file=None):
     logger = logging.getLogger('emr_scaling')
+
+    # Clear any existing handlers to prevent duplication
+    logger.handlers.clear()
+
+    # Prevent propagation to root logger
+    logger.propagate = False
+
+    # Set log level
     logger.setLevel(log_level)
-    
+
     # Create formatter
-    formatter = logging.Formatter(
-        '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    )
-    
-    # Add console handler if requested
-    if log_to_console:
-        console_handler = logging.StreamHandler(sys.stdout)
-        console_handler.setFormatter(formatter)
-        logger.addHandler(console_handler)
-    
-    # Add file handler if log file is specified
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+    # Add file handler if log_file is specified
     if log_file:
-        # Create log directory if it doesn't exist
-        log_dir = os.path.dirname(log_file)
-        if log_dir and not os.path.exists(log_dir):
-            os.makedirs(log_dir)
-            
-        # Set up rotating file handler (10MB max size, keep 5 backups)
-        file_handler = RotatingFileHandler(
-            log_file, maxBytes=10*1024*1024, backupCount=5
-        )
+        os.makedirs(os.path.dirname(log_file), exist_ok=True)
+        file_handler = logging.FileHandler(log_file)
         file_handler.setFormatter(formatter)
         logger.addHandler(file_handler)
-    
+
+    # Add stream handler for console output
+    console_handler = logging.StreamHandler()
+    console_handler.setFormatter(formatter)
+    logger.addHandler(console_handler)
+
     return logger

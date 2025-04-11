@@ -25,8 +25,11 @@ class EMRScalingService:
         # Set up logging
         log_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'logs')
         log_file = os.path.join(log_dir, 'emr_scaling.log')
+
+        # Initialize the logger
         self.logger = setup_logging(log_level=logging.INFO, log_file=log_file)
-        
+
+        # Use the same logger instance for all components
         self.logger.info("Initializing EMR Scaling Service")
         self.logger.info(f"Using configuration file: {config_path}")
         

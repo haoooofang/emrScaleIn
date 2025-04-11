@@ -1,5 +1,8 @@
 import logging
 import copy
+
+import boto3
+
 from src.utils.aws_utils import create_aws_client, retry_aws_api
 
 logger = logging.getLogger('emr_scaling')
@@ -38,19 +41,15 @@ class EMRClusterManager:
         logger.info(f"Retrieving original scaling configuration for cluster {self.cluster_id}")
         
         try:
-            response = self.emr_client.describe_cluster(ClusterId=self.cluster_id)
-            
-            if 'Cluster' not in response:
-                logger.error(f"Invalid response from describe_cluster: {response}")
-                raise ValueError(f"Invalid response from describe_cluster: {response}")
-            
-            if 'ManagedScalingPolicy' not in response['Cluster']:
+            response = self.emr_client.get_managed_scaling_policy(ClusterId=self.cluster_id)
+
+            if 'ManagedScalingPolicy' not in response:
                 logger.warning(f"Cluster {self.cluster_id} does not have a managed scaling policy")
                 self.original_scaling_config = None
                 self.current_scaling_config = None
                 return
             
-            self.original_scaling_config = response['Cluster']['ManagedScalingPolicy']
+            self.original_scaling_config = response['ManagedScalingPolicy']
             self.current_scaling_config = copy.deepcopy(self.original_scaling_config)
             
             logger.info(f"Original scaling configuration: {self.original_scaling_config}")

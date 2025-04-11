@@ -65,7 +65,7 @@ def main():
         log_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logs')
         log_file = os.path.join(log_dir, 'emr_scaling.log')
     
-    logger = setup_logging(log_level=log_level, log_file=log_file, log_to_console=log_to_console)
+    logger = setup_logging(log_level=log_level, log_file=log_file)
     
     # Log startup information
     logger.info("Starting EMR Auto-Scaling Service")

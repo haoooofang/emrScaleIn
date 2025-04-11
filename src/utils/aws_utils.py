@@ -16,6 +16,8 @@ def create_aws_client(service_name, region_name, **kwargs):
         AWS service client
     """
     try:
+        # sess = boto3.Session(profile_name='sso', region_name=region_name)
+        # client = sess.client(service_name, **kwargs)
         client = boto3.client(service_name, region_name=region_name, **kwargs)
         logger.debug(f"Created {service_name} client in {region_name}")
         return client
